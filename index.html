@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Data Matcher</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+    </div>
+    
+    <div id="customAlert" class="custom-alert">
+        <i class="fas fa-exclamation-circle"></i>
+        <div class="alert-message">This is an alert message</div>
+        <button class="close-btn" onclick="hideAlert()"><i class="fas fa-times"></i></button>
+    </div>
+    
+    <div class="container">
+        <header>
+            <h3>Advanced Data chacking System</h3>
+            <p class="subtitle">Quickly match your data against Excel, CSV, and other spreadsheet files</p>
+        </header>
+        
+        <div class="main-content">
+            <div class="section">
+                <div class="section-header">
+                    <h2><i class="fas fa-file-upload"></i> Step 1: Upload Your File</h2>
+                </div>
+                <div class="section-body">
+                    <div class="file-upload-container">
+                        <div class="file-upload" id="dropZone">
+  <!--    <p>Drag & drop your file here or click to browse</p>-->
+                            <button class="btn">            <i class="fas fa-cloud-upload-alt"></i>
+ Select File</button>
+                            <input type="file" id="excelFile" class="file-input" accept=".xlsx,.xls,.csv,.ods,.txt" />
+                        </div>
+                        <div class="file-info" id="fileInfo">
+                            No file selected
+                        </div>
+                        <div class="supported-formats">
+                            Supported formats: .xlsx, .xls, .csv, .ods, .txt
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-header">
+                    <h2><i class="fas fa-edit"></i> Step 2: Enter Data to Match</h2>
+                </div>
+                <div class="section-body">
+                    <textarea id="userData" placeholder="Enter your data items here, one per line. You can also paste from Excel or other sources."></textarea>
+                    <div class="tooltip" style="margin-top: 10px; float: right;">
+                        <i class="fas fa-info-circle" style="color: var(--primary-color);"></i>
+                        <span class="tooltiptext">Tip: You can paste data directly from Excel columns</span>
+                    </div>
+                </div>
+            </div>
+            
+            <button id="processBtn" class="btn btn-block" onclick="processData()" style="margin-top: 20px;">
+                <i class="fas fa-play"></i> Process Data
+            </button>
+            
+            <div class="progress-container" id="progressContainer">
+                <div class="progress-bar">
+                    <div class="progress" id="progressBar"></div>
+                </div>
+                <div class="progress-text" id="progressText">Processing data...</div>
+            </div>
+            
+            <div id="results" style="display: none;">
+                <div class="section">
+                    <div class="section-header">
+                        <h2><i class="fas fa-chart-bar"></i> Matching Results</h2>
+                    </div>
+                    <div class="section-body">
+                        <div class="stats">
+                            <div class="stat-card">
+                                <div class="stat-value" id="totalRecords">0</div>
+                                <div class="stat-label">Total Items Entered</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value" id="matches">0</div>
+                                <div class="stat-label">Matches Found</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value" id="nonMatches">0</div>
+                                <div class="stat-label">Non-Matches</div>
+                            </div>
+                        </div>
+                        
+                        <div class="results-container">
+                            <div class="result-box">
+                                <div class="result-header matches-header">
+                                    <span><i class="fas fa-check-circle"></i> Good</span>
+                                    <span id="matchesCount">0</span>
+                                </div>
+                                <div class="result-body" id="matchesList">
+                                    <div class="result-item">
+                                        Back
+                                        <button class="copy-btn" style="visibility: hidden;"><i class="far fa-copy"></i></button>
+                                    </div>
+                                </div>
+                                <div style="padding: 10px; text-align: center;">
+                                    <button class="btn copy-all" onclick="copyAll('matchesList')"><i class="far fa-copy"></i>All Copy </button>
+                                </div>
+                            </div>
+                            
+                            <div class="result-box">
+                                <div class="result-header non-matches-header">
+                                    <span><i class="fas fa-times-circle"></i> Back</span>
+                                    <span id="nonMatchesCount">0</span>
+                                </div>
+                                <div class="result-body" id="nonMatchesList">
+                                    <div class="result-item">
+                                        Back
+                                        <button class="copy-btn" style="visibility: hidden;"><i class="far fa-copy"></i></button>
+                                    </div>
+                                </div>
+                                <div style="padding: 10px; text-align: center;">
+                                    <button class="btn copy-all" onclick="copyAll('nonMatchesList')"><i class="far fa-copy"></i>All Copy</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
