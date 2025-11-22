@@ -1,0 +1,1157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Data Checking System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3f37c9;
+            --success-color: #4cc9f0;
+            --danger-color: #f72585;
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
+            --border-color: #dee2e6;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.6;
+            color: var(--dark-color);
+            background-color: #f5f7fa;
+            padding: 0px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-weight: 300;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            padding: 20px;
+        }
+
+        .section {
+            margin-bottom: 30px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .section-header {
+            background-color: var(--light-color);
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .section-header h2 {
+            font-size: 1.2rem;
+            color: var(--dark-color);
+            margin: 0;
+        }
+
+        .section-body {
+            padding: 20px;
+        }
+
+        .file-upload-container {
+            margin: 15px 0;
+            position: relative;
+        }
+
+        .file-upload {
+            padding: 15px;
+            border: 2px dashed var(--border-color);
+            border-radius: 8px;
+            text-align: center;
+            transition: all 0.3s;
+            cursor: pointer;
+            position: relative;
+            background: rgba(67, 97, 238, 0.05);
+        }
+
+        .file-upload.hidden {
+            display: none;
+        }
+
+        .file-upload i.fas.fa-cloud-upload-alt {
+            color: black;
+        }
+
+        .file-upload:hover {
+            border-color: var(--primary-color);
+            background: rgba(67, 97, 238, 0.1);
+        }
+
+        .file-upload i {
+            font-size: 24px;
+            color: var(--primary-color);
+            margin-bottom: 5px;
+        }
+
+        .file-upload p {
+            margin: 5px 0;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .file-input {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+        }
+
+        .file-info {
+            font-size: 13px;
+            color: #666;
+            margin-top: 8px;
+        }
+
+        .file-name {
+            color: var(--primary-color);
+            font-weight: 500;
+        }
+
+        .file-uploaded-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 15px;
+            background-color: rgba(67, 97, 238, 0.1);
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .upload-new-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+
+        .upload-new-btn:hover {
+            background: var(--secondary-color);
+        }
+
+        .supported-formats {
+            font-size: 12px;
+            color: #888;
+            margin-top: 3px;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 200px;
+            padding: 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            resize: vertical;
+            font-family: inherit;
+            font-size: 0.95rem;
+            transition: border-color 0.3s;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .btn:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-block {
+            display: block;
+            width: 100%;
+        }
+
+        .btn i {
+            margin-right: 8px;
+        }
+
+        .results-container {
+            display: flex;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .result-box {
+            background: white;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .result-header {
+            padding: 15px;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .matches-header {
+            background-color: var(--success-color);
+        }
+
+        .non-matches-header {
+            background-color: var(--danger-color);
+        }
+
+        .result-body {
+            padding: 15px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .result-item {
+            padding: 10px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .result-item:last-child {
+            border-bottom: none;
+        }
+
+        .copy-btn {
+            background: none;
+            border: none;
+            color: var(--primary-color);
+            cursor: pointer;
+            font-size: 0.9rem;
+            padding: 2px 5px;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+
+        .copy-btn:hover {
+            background-color: rgba(67, 97, 238, 0.1);
+        }
+
+        .copy-all {
+            margin-top: 10px;
+            background-color: var(--light-color);
+            border: 1px solid var(--border-color);
+            color: var(--dark-color);
+            padding: 8px 15px;
+            font-size: 0.9rem;
+        }
+
+        .copy-all:hover {
+            background-color: white;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            padding: 20px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+
+        .progress-container {
+            margin-top: 30px;
+            display: none;
+        }
+
+        .progress-bar {
+            height: 10px;
+            background-color: var(--light-color);
+            border-radius: 5px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .progress {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--success-color));
+            width: 0;
+            transition: width 0.3s;
+        }
+
+        .progress-text {
+            text-align: center;
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+
+        /* Custom Alert Styles */
+        .custom-alert {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            background-color: #fff;
+            color: var(--dark-color);
+            display: flex;
+            align-items: center;
+            z-index: 1000;
+            transform: translateX(200%);
+            transition: transform 0.3s ease-out;
+            max-width: 400px;
+        }
+
+        .custom-alert.show {
+            transform: translateX(0);
+        }
+
+        .custom-alert.error {
+            border-left: 5px solid var(--danger-color);
+        }
+
+        .custom-alert.success {
+            border-left: 5px solid var(--success-color);
+        }
+
+        .custom-alert.warning {
+            border-left: 5px solid #ffc107;
+        }
+
+        .custom-alert i {
+            margin-right: 15px;
+            font-size: 1.5rem;
+        }
+
+        .custom-alert .close-btn {
+            margin-left: 20px;
+            background: none;
+            border: none;
+            color: #6c757d;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        /* Duplicate Alert Styles */
+        .duplicate-alert {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            z-index: 1001;
+            max-width: 500px;
+            width: 90%;
+            display: none;
+        }
+
+        .duplicate-alert.show {
+            display: block;
+        }
+
+        .duplicate-alert h3 {
+            margin-bottom: 15px;
+            color: var(--danger-color);
+        }
+
+        .duplicate-list {
+            max-height: 200px;
+            overflow-y: auto;
+            margin: 15px 0;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 10px;
+        }
+
+        .duplicate-item {
+            padding: 8px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .duplicate-item:last-child {
+            border-bottom: none;
+        }
+
+        .remove-duplicate-btn {
+            background: var(--danger-color);
+            color: white;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        .duplicate-alert-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            display: none;
+        }
+
+        .overlay.show {
+            display: block;
+        }
+
+        /* Loading Animation */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+            display: none;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Animation for file upload */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .pulse {
+            animation: pulse 1.5s infinite;
+        }
+
+        /* Tooltip styles */
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 200px;
+            background-color: #555;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -100px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.8rem;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            .results-container {
+                flex-direction: column;
+            }
+            
+            .stats {
+                grid-template-columns: 1fr;
+            }
+            
+            .custom-alert {
+                max-width: 90%;
+                right: 5%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+    </div>
+    
+    <div id="customAlert" class="custom-alert">
+        <i class="fas fa-exclamation-circle"></i>
+        <div class="alert-message">This is an alert message</div>
+        <button class="close-btn" onclick="hideAlert()"><i class="fas fa-times"></i></button>
+    </div>
+    
+    <div class="overlay" id="overlay"></div>
+    
+    <div class="duplicate-alert" id="duplicateAlert">
+        <h3><i class="fas fa-exclamation-triangle"></i> Duplicate Items Found</h3>
+        <p>The following items appear more than once in your list:</p>
+        <div class="duplicate-list" id="duplicateList">
+            <!-- Duplicate items will be listed here -->
+        </div>
+        <div class="duplicate-alert-actions">
+            <button class="btn" onclick="removeAllDuplicates()">Remove All Duplicates</button>
+            <button class="btn" onclick="closeDuplicateAlert()">Keep All</button>
+        </div>
+    </div>
+    
+    <div class="container">
+        <header>
+            <h3>Advanced Data Checking System</h3>
+            <p class="subtitle"> আমাদের এই টুলসের সাহায্যে আপনার রেকর্ড ফাইল খুব সহজেই দ্রুত চেক কররতে পারবেন। </br> ( Fbm - Verified ⚙ )</p>
+        </header>
+        
+        <div class="main-content">
+            <div class="section">
+                <div class="section-header">
+                    <h2><i class="fas fa-file-upload"></i> Step 1: Upload Record File</h2>
+                </div>
+                <div class="section-body">
+                    <div class="file-upload-container">
+                        <div class="file-uploaded-header" id="fileUploadedHeader" style="display: none;">
+                            <div>
+                                <span>Uploaded File: </span>
+                                <span class="file-name" id="uploadedFileName"></span>
+                            </div>
+                            <button class="upload-new-btn" onclick="showFileUpload()">
+                                <i class="fas fa-upload"></i> Upload New
+                            </button>
+                        </div>
+                        
+                        <div class="file-upload" id="dropZone">
+                            <button class="btn">            
+                                <i class="fas fa-cloud-upload-alt"></i> Select File
+                            </button>
+                            <input type="file" id="excelFile" class="file-input" accept=".xlsx,.xls,.csv,.ods,.txt" />
+                        </div>
+                        <div class="file-info" id="fileInfo">
+                            No file selected
+                        </div>
+                        <div class="supported-formats">
+                            Supported formats: .xlsx, .xls, .csv, .ods, .txt
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-header">
+                    <h2><i class="fas fa-edit"></i> Step 2: Enter your UID</h2>
+                </div>
+                <div class="section-body">
+                    <textarea id="userData" placeholder=" 1. আপনার ফাইল থেকে একসাথে সবগুলো UID কপি করে এনে এখানে পেস্ট করুন।  
+2. নিচের ( Process Data ) বাটনে ক্লিক করুন। " oninput="checkDuplicates()"></textarea>
+                    <div class="tooltip" style="margin-top: 10px; float: right;">
+                        <i class="fas fa-info-circle" style="color: var(--primary-color);"></i>
+                        <span class="tooltiptext">Tip: You can paste data directly from Excel columns</span>
+                    </div>
+                </div>
+            </div>
+            
+            <button id="processBtn" class="btn btn-block" onclick="processData()" style="margin-top: 20px;">
+                <i class="fas fa-play"></i> Process Data
+            </button>
+            
+            <div class="progress-container" id="progressContainer">
+                <div class="progress-bar">
+                    <div class="progress" id="progressBar"></div>
+                </div>
+                <div class="progress-text" id="progressText">Processing data...</div>
+            </div>
+            
+            <div id="results" style="display: none;">
+                <div class="section">
+                    <div class="section-header">
+                        <h2><i class="fas fa-chart-bar"></i> Matching Results</h2>
+                    </div>
+                    <div class="section-body">
+                        <div class="stats">
+                            <div class="stat-card">
+                                <div class="stat-value" id="totalRecords">0</div>
+                                <div class="stat-label">Total Items Entered</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value" id="matches">0</div>
+                                <div class="stat-label">Matches Found</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value" id="nonMatches">0</div>
+                                <div class="stat-label">Non-Matches</div>
+                            </div>
+                        </div>
+                        
+                        <div class="results-container">
+                            <div class="result-box">
+                                <div class="result-header matches-header">
+                                    <span><i class="fas fa-check-circle"></i> Good</span>
+                                    <span id="matchesCount">0</span>
+                                </div>
+                                <div class="result-body" id="matchesList">
+                                    <div class="result-item">
+                                        Back
+                                        <button class="copy-btn" style="visibility: hidden;"><i class="far fa-copy"></i></button>
+                                    </div>
+                                </div>
+                                <div style="padding: 10px; text-align: center;">
+                                    <button class="btn copy-all" onclick="copyAll('matchesList')"><i class="far fa-copy"></i> Copy All</button>
+                                </div>
+                            </div>
+                            
+                            <div class="result-box">
+                                <div class="result-header non-matches-header">
+                                    <span><i class="fas fa-times-circle"></i> Back</span>
+                                    <span id="nonMatchesCount">0</span>
+                                </div>
+                                <div class="result-body" id="nonMatchesList">
+                                    <div class="result-item">
+                                        Back
+                                        <button class="copy-btn" style="visibility: hidden;"><i class="far fa-copy"></i></button>
+                                    </div>
+                                </div>
+                                <div style="padding: 10px; text-align: center;">
+                                    <button class="btn copy-all" onclick="copyAll('nonMatchesList')"><i class="far fa-copy"></i> Copy All</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script>
+        let excelData = [];
+        let fileName = '';
+        let duplicateItems = [];
+
+        function showAlert(message, type = 'info') {
+            const alert = document.getElementById('customAlert');
+            const icon = alert.querySelector('i');
+            const messageDiv = alert.querySelector('.alert-message');
+            
+            messageDiv.textContent = message;
+            alert.className = `custom-alert ${type} show`;
+            
+            if (type === 'error') {
+                icon.className = 'fas fa-exclamation-circle';
+            } else if (type === 'success') {
+                icon.className = 'fas fa-check-circle';
+            } else if (type === 'warning') {
+                icon.className = 'fas fa-exclamation-triangle';
+            } else {
+                icon.className = 'fas fa-info-circle';
+            }
+            
+            setTimeout(hideAlert, 5000);
+        }
+
+        function hideAlert() {
+            const alert = document.getElementById('customAlert');
+            alert.classList.remove('show');
+        }
+
+        function showLoading() {
+            document.getElementById('loadingOverlay').style.display = 'flex';
+        }
+
+        function hideLoading() {
+            document.getElementById('loadingOverlay').style.display = 'none';
+        }
+
+        function showFileUpload() {
+            document.getElementById('fileUploadedHeader').style.display = 'none';
+            document.getElementById('dropZone').style.display = 'block';
+            document.getElementById('fileInfo').textContent = 'No file selected';
+        }
+
+        function handleFileUploadSuccess() {
+            document.getElementById('dropZone').style.display = 'none';
+            document.getElementById('fileUploadedHeader').style.display = 'flex';
+            document.getElementById('uploadedFileName').textContent = fileName;
+        }
+
+        document.getElementById('excelFile').addEventListener('change', function(e) {
+            handleFile(e.target.files[0]);
+        });
+
+        const dropZone = document.getElementById('dropZone');
+
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('pulse');
+            dropZone.style.borderColor = 'var(--primary-color)';
+            dropZone.style.backgroundColor = 'rgba(67, 97, 238, 0.05)';
+        });
+
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('pulse');
+            dropZone.style.borderColor = 'var(--border-color)';
+            dropZone.style.backgroundColor = '';
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('pulse');
+            dropZone.style.borderColor = 'var(--border-color)';
+            dropZone.style.backgroundColor = '';
+            
+            if (e.dataTransfer.files.length) {
+                handleFile(e.dataTransfer.files[0]);
+            }
+        });
+
+        function handleFile(file) {
+            if (!file) return;
+            
+            showLoading();
+            fileName = file.name;
+            document.getElementById('fileInfo').innerHTML = `Selected file: <span class="file-name">${fileName}</span>`;
+            
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                try {
+                    let data;
+                    if (file.name.endsWith('.csv') || file.name.endsWith('.txt')) {
+                        const csvData = e.target.result;
+                        const lines = csvData.split('\n');
+                        excelData = [];
+                        
+                        lines.forEach(line => {
+                            const items = line.split(/[,;\t|]/).map(item => item.trim());
+                            excelData = excelData.concat(items);
+                        });
+                    } else {
+                        data = new Uint8Array(e.target.result);
+                        const workbook = XLSX.read(data, { type: 'array' });
+                        
+                        excelData = [];
+                        workbook.SheetNames.forEach(sheetName => {
+                            const sheet = workbook.Sheets[sheetName];
+                            const sheetData = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: "" });
+                            
+                            sheetData.forEach(row => {
+                                if (Array.isArray(row)) {
+                                    excelData = excelData.concat(row);
+                                } else {
+                                    excelData.push(row);
+                                }
+                            });
+                        });
+                    }
+                    
+                    excelData = excelData.map(item => {
+                        if (typeof item === 'string') return item.trim();
+                        if (typeof item === 'number') return item.toString();
+                        return item;
+                    }).filter(item => item !== "" && item !== undefined && item !== null);
+                    
+                    console.log('File loaded successfully. Total items:', excelData.length);
+                    showAlert('File loaded successfully!', 'success');
+                    handleFileUploadSuccess();
+                } catch (error) {
+                    console.error('Error reading file:', error);
+                    showAlert('Error reading file. Please make sure it\'s a valid file format.', 'error');
+                } finally {
+                    setTimeout(() => {
+                        hideLoading();
+                    }, 500);
+                }
+            };
+            
+            reader.onerror = function() {
+                hideLoading();
+                showAlert('Error reading file. Please try again.', 'error');
+            };
+            
+            if (file.name.endsWith('.csv') || file.name.endsWith('.txt')) {
+                reader.readAsText(file);
+            } else {
+                reader.readAsArrayBuffer(file);
+            }
+        }
+
+        function checkDuplicates() {
+            const userInput = document.getElementById('userData').value;
+            const userData = userInput.split('\n')
+                .map(item => item.trim())
+                .filter(item => item);
+            
+            // Find duplicates
+            const itemCount = {};
+            duplicateItems = [];
+            
+            userData.forEach(item => {
+                if (itemCount[item]) {
+                    itemCount[item]++;
+                } else {
+                    itemCount[item] = 1;
+                }
+            });
+            
+            // Collect duplicates
+            for (const [item, count] of Object.entries(itemCount)) {
+                if (count > 1) {
+                    duplicateItems.push(item);
+                }
+            }
+            
+            // Show duplicate alert if duplicates found
+            if (duplicateItems.length > 0) {
+                showDuplicateAlert();
+            }
+        }
+
+        function showDuplicateAlert() {
+    const duplicateList = document.getElementById('duplicateList');
+    duplicateList.innerHTML = '';
+    
+    duplicateItems.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'duplicate-item';
+        div.innerHTML = `
+            <span>${item} (all copies will be removed)</span>
+            <button class="remove-duplicate-btn" onclick="removeDuplicate('${escapeHtml(item)}')">Remove All</button>
+        `;
+        duplicateList.appendChild(div);
+    });
+    
+    document.getElementById('duplicateAlert').classList.add('show');
+    document.getElementById('overlay').classList.add('show');
+}
+
+        function closeDuplicateAlert() {
+            document.getElementById('duplicateAlert').classList.remove('show');
+            document.getElementById('overlay').classList.remove('show');
+        }
+
+        function removeDuplicate(item) {
+    const textarea = document.getElementById('userData');
+    let lines = textarea.value.split('\n')
+        .map(line => line.trim())
+        .filter(line => line);
+    
+    // Remove ALL occurrences of the duplicate item (not just keeping one)
+    lines = lines.filter(line => line !== item);
+    
+    // Update textarea
+    textarea.value = lines.join('\n');
+    
+    // Recheck for duplicates
+    checkDuplicates();
+    
+    // If no more duplicates, close the alert
+    if (duplicateItems.length === 0) {
+        closeDuplicateAlert();
+    }
+}
+        function removeAllDuplicates() {
+    const textarea = document.getElementById('userData');
+    let lines = textarea.value.split('\n')
+        .map(line => line.trim())
+        .filter(line => line);
+    
+    // Remove ALL duplicate items completely
+    const uniqueLines = [];
+    const seen = new Set();
+    const duplicates = new Set(duplicateItems);
+    
+    lines.forEach(line => {
+        if (!duplicates.has(line)) {
+            uniqueLines.push(line);
+        }
+    });
+    
+    // Update textarea
+    textarea.value = uniqueLines.join('\n');
+    
+    // Close the alert
+    closeDuplicateAlert();
+    
+    showAlert('All duplicate items completely removed!', 'success');
+}
+        function processData() {
+            const userInput = document.getElementById('userData').value;
+            const userData = userInput.split('\n')
+                .map(item => item.trim())
+                .filter(item => item);
+            
+            const userDataCount = userData.length;
+            
+            if (excelData.length === 0) {
+                showAlert("Please upload a file first", "error");
+                return;
+            }
+            
+            if (userDataCount === 0) {
+                showAlert("Please enter data to match", "error");
+                return;
+            }
+            
+            document.getElementById('progressContainer').style.display = 'block';
+            const progressBar = document.getElementById('progressBar');
+            const progressText = document.getElementById('progressText');
+            
+            const chunkSize = 1000;
+            const totalChunks = Math.ceil(userData.length / chunkSize);
+            let matches = [];
+            let nonMatches = [];
+            
+            function isMatch(searchItem, excelItem) {
+                const strSearch = searchItem.toString().trim().toLowerCase();
+                const strExcel = excelItem.toString().trim().toLowerCase();
+                
+                if (strSearch === strExcel) return true;
+                
+                if (!isNaN(strSearch) && !isNaN(strExcel)) {
+                    return parseFloat(strSearch) === parseFloat(strExcel);
+                }
+                
+                if (strSearch.localeCompare(strExcel, undefined, { sensitivity: 'base' }) === 0) {
+                    return true;
+                }
+                
+                return false;
+            }
+            
+            function processChunk(chunkIndex) {
+                const start = chunkIndex * chunkSize;
+                const end = Math.min(start + chunkSize, userData.length);
+                const chunk = userData.slice(start, end);
+                
+                chunk.forEach(item => {
+                    let found = false;
+                    
+                    for (let i = 0; i < excelData.length; i++) {
+                        if (isMatch(item, excelData[i])) {
+                            matches.push(item);
+                            found = true;
+                            break;
+                        }
+                    }
+                    
+                    if (!found) {
+                        nonMatches.push(item);
+                    }
+                });
+                
+                const progress = ((chunkIndex + 1) / totalChunks) * 100;
+                progressBar.style.width = `${progress}%`;
+                progressText.textContent = `Processing... ${Math.round(progress)}% complete`;
+                
+                if (chunkIndex < totalChunks - 1) {
+                    setTimeout(() => processChunk(chunkIndex + 1), 0);
+                } else {
+                    displayResults(matches, nonMatches, userDataCount);
+                }
+            }
+            
+            processChunk(0);
+        }
+
+        function displayResults(matches, nonMatches, userDataCount) {
+            document.getElementById('progressContainer').style.display = 'none';
+            
+            document.getElementById('totalRecords').textContent = userDataCount.toLocaleString();
+            document.getElementById('matches').textContent = matches.length.toLocaleString();
+            document.getElementById('nonMatches').textContent = nonMatches.length.toLocaleString();
+            
+            const matchesList = document.getElementById('matchesList');
+            const nonMatchesList = document.getElementById('nonMatchesList');
+            
+            matchesList.innerHTML = '';
+            nonMatchesList.innerHTML = '';
+            
+            document.getElementById('matchesCount').textContent = matches.length;
+            document.getElementById('nonMatchesCount').textContent = nonMatches.length;
+            
+            if (matches.length > 0) {
+                matches.forEach(item => {
+                    const div = document.createElement('div');
+                    div.className = 'result-item';
+                    div.innerHTML = `
+                        ${item}
+                        <button class="copy-btn" onclick="copyToClipboard('${escapeHtml(item)}')"><i class="far fa-copy"></i></button>
+                    `;
+                    matchesList.appendChild(div);
+                });
+            } else {
+                matchesList.innerHTML = '<div class="result-item">No matches found</div>';
+            }
+            
+            if (nonMatches.length > 0) {
+                nonMatches.forEach(item => {
+                    const div = document.createElement('div');
+                    div.className = 'result-item';
+                    div.innerHTML = `
+                        ${item}
+                        <button class="copy-btn" onclick="copyToClipboard('${escapeHtml(item)}')"><i class="far fa-copy"></i></button>
+                    `;
+                    nonMatchesList.appendChild(div);
+                });
+            } else {
+                nonMatchesList.innerHTML = '<div class="result-item">All items matched</div>';
+            }
+            
+            document.getElementById('results').style.display = 'block';
+            document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function escapeHtml(unsafe) {
+            return unsafe
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = event.target.innerHTML;
+                event.target.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                setTimeout(() => {
+                    event.target.innerHTML = originalText;
+                }, 2000);
+            }).catch(err => {
+                console.error('Could not copy text: ', err);
+                showAlert('Failed to copy text to clipboard', 'error');
+            });
+        }
+
+        function copyAll(listId) {
+            const container = document.getElementById(listId);
+            const items = Array.from(container.querySelectorAll('.result-item'))
+                .map(item => {
+                    // Remove the copy button text and get only the item text
+                    const textContent = item.textContent.trim();
+                    return textContent.replace('Copied!', '').trim();
+                })
+                .filter(item => item !== 'No matches found' && item !== 'All items matched');
+            
+            if (items.length > 0) {
+                navigator.clipboard.writeText(items.join('\n')).then(() => {
+                    const button = event.target;
+                    const originalText = button.innerHTML;
+                    button.innerHTML = '<i class="fas fa-check"></i> Copied to clipboard!';
+                    setTimeout(() => {
+                        button.innerHTML = originalText;
+                    }, 2000);
+                    showAlert('All items copied to clipboard!', 'success');
+                }).catch(err => {
+                    console.error('Could not copy text: ', err);
+                    showAlert('Failed to copy items to clipboard', 'error');
+                });
+            } else {
+                showAlert('No items to copy', 'warning');
+            }
+        }
+    </script>
+</body>
+</html>
